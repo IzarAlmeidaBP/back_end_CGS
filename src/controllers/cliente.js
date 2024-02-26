@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { criarCliente, listarCliente } from '../services/cliente.js';
+import {
+  criarCliente,
+  listarCliente,
+  deletarCliente,
+  atualizarCliente,
+} from '../services/cliente.js';
 
 const router = Router();
 
@@ -13,7 +18,16 @@ router.post('/cliente', async (req, res) => {
   res.status(201).send(cliente);
 });
 
-router.delete('/cliente', (req, res) => {
-  res.send('DELETE CLIENTE');
+router.put('/cliente', async (req, res) => {
+  const cliente = req.body;
+  const updatedCliente = await atualizarCliente(cliente);
+  res.send(updatedCliente);
 });
+
+router.delete('/cliente', async (req, res) => {
+  const clienteId = req.body.id;
+  await deletarCliente(clienteId);
+  res.send('Cliente deletado com sucesso.');
+});
+
 export default router;
